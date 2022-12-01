@@ -2,18 +2,7 @@ cases:
   task_1:
     - input: |+
         10
-        2
+        23
 
         2
-      output: '12'
-  task_2:
-    - input: |+
-        10
-        2
-
-        2
-
-        2
-
-        3
-      output: '17'
+      output: '121'
