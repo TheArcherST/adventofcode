@@ -1,8 +1,12 @@
 import os
 
 import importlib
-from base import AdventOfCodeWorkspace
 import re
+import yaml
+
+from base import AdventOfCodeWorkspace, ResolutionTests
+
+from dataclass_factory import Factory
 
 
 def load_modules(root_module: str = r'resolutions'):
@@ -24,10 +28,24 @@ def load_modules(root_module: str = r'resolutions'):
             print(f"Can't import module {i}")
 
 
+def load_testcases(day: int) -> ResolutionTests:
+    with open(f'testcases/day_{day}.yaml') as fs:
+        data = yaml.safe_load(fs)
+
+    factory = Factory()
+    tests = factory.load(data, ResolutionTests)
+
+    return tests
+
+
 def main():
     load_modules()
     latest = AdventOfCodeWorkspace.find_latest()
-    latest = latest()
+
+    day = latest.get_day()
+    testcases = load_testcases(day)
+
+    latest = latest(testcases)
     latest.run()
 
 
