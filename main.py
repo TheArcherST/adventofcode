@@ -3,6 +3,7 @@ import os
 import importlib
 import re
 import yaml
+import dotenv
 
 from base import AdventOfCodeWorkspace, ResolutionTests
 from rich.console import Console
@@ -40,6 +41,7 @@ def load_testcases(day: int) -> ResolutionTests:
 
 
 def main():
+    data = dotenv.dotenv_values()
     console = Console()
 
     load_modules()
@@ -47,7 +49,7 @@ def main():
     latest = AdventOfCodeWorkspace.find_by_day(day)
     testcases = load_testcases(day)
 
-    latest = latest(console, testcases)
+    latest = latest(console, testcases, data['SESSION'])
     latest.run()
 
 
