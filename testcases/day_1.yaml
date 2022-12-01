@@ -6,3 +6,14 @@ cases:
 
         2
       output: '12'
+  task_2:
+    - input: |+
+        10
+        2
+
+        2
+
+        2
+
+        3
+      output: '17'
