@@ -5,6 +5,7 @@ import re
 import yaml
 
 from base import AdventOfCodeWorkspace, ResolutionTests
+from rich.console import Console
 
 from dataclass_factory import Factory
 
@@ -39,13 +40,14 @@ def load_testcases(day: int) -> ResolutionTests:
 
 
 def main():
-    load_modules()
-    latest = AdventOfCodeWorkspace.find_latest()
+    console = Console()
 
-    day = latest.get_day()
+    load_modules()
+    day = AdventOfCodeWorkspace.get_latest_day()
+    latest = AdventOfCodeWorkspace.find_by_day(day)
     testcases = load_testcases(day)
 
-    latest = latest(testcases)
+    latest = latest(console, testcases)
     latest.run()
 
 
