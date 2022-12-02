@@ -1,11 +1,11 @@
-from base import AdventOfCodeWorkspace
+from fastaof import AdventOfCodePuzzle
 
 
 def is_value_filter(seq):
     return filter(lambda _: bool(_), seq)
 
 
-class Resolution(AdventOfCodeWorkspace):
+class Resolution(AdventOfCodePuzzle):
     def task_1(self, data):
         return max(map(lambda x: sum(map(int, is_value_filter(x.split('\n')))), data.split('\n\n')))
 

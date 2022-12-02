@@ -1,6 +1,6 @@
 from enum import Enum
 
-from base import AdventOfCodeWorkspace
+from fastaof import AdventOfCodePuzzle
 
 
 class GameEnum(Enum):
@@ -44,7 +44,7 @@ def prepare_literal(l):
     return lib[l]
 
 
-class Resolution(AdventOfCodeWorkspace):
+class Resolution(AdventOfCodePuzzle):
     def task_1(self, data):
         data = data.strip()
         score = 0
