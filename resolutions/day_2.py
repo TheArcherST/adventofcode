@@ -1,13 +1,12 @@
-from itertools import islice
 from enum import Enum
 
 from base import AdventOfCodeWorkspace
 
 
 class GameEnum(Enum):
-    PAPER = 'PAPER'
-    ROCK = 'ROCK'
-    SCISSORS = 'SCISSORS'
+    ROCK = 1
+    PAPER = 2
+    SCISSORS = 3
 
     @classmethod
     def to_score(cls, val):
@@ -17,37 +16,19 @@ class GameEnum(Enum):
 
         return lib[val]
 
-    @classmethod
-    def to_win(cls, val):
-        # note: normalize(val + 1)
-        lib = {cls.ROCK: cls.PAPER,
-               cls.PAPER: cls.SCISSORS,
-               cls.SCISSORS: cls.ROCK}
-
-        return lib[val]
+    @staticmethod
+    def normalize(n: int):  # depend from number 3
+        return ((n - 1) % 3) + 1
 
     @classmethod
-    def to_lose(cls, val):
-        # note: normalize(val + 2)
-        lib = {cls.ROCK: cls.SCISSORS,
-               cls.PAPER: cls.ROCK,
-               cls.SCISSORS: cls.PAPER}
+    def to_win(cls, val: 'GameEnum'):
+        res = GameEnum(cls.normalize(val.value+1))
+        return res
 
-        return lib[val]
-
-
-def batched(iterable, n):
-    if n < 1:
-        raise ValueError('n must be >= 1')
-
-    it = iter(iterable)
-
-    while batch := list(islice(it, n)):
-        yield batch
-
-
-def is_value_filter(seq):
-    return filter(lambda _: bool(_), seq)
+    @classmethod
+    def to_lose(cls, val: 'GameEnum'):
+        res = GameEnum(cls.normalize(val.value+2))
+        return res
 
 
 def prepare_literal(l):
