@@ -87,6 +87,7 @@ class Resolution(AdventOfCodeWorkspace):
         for i in data.split('\n'):
             first, second = i.split()
             a = prepare_literal(first)
+
             if second == 'X':
                 b = GameEnum.to_lose(a)
             elif second == 'Y':
@@ -97,9 +98,7 @@ class Resolution(AdventOfCodeWorkspace):
             score += GameEnum.to_score(b)
             if a is b:
                 score += 3
-            elif any([a is GameEnum.SCISSORS and b is GameEnum.ROCK,
-                      a is GameEnum.ROCK and b is GameEnum.PAPER,
-                      a is GameEnum.PAPER and b is GameEnum.SCISSORS]):
+            elif GameEnum.to_win(a) is b:
                 score += 6
 
             else:
