@@ -1,0 +1,13 @@
+cases:
+  task_1:
+    - input: |+
+        A Y
+        B X
+        C Z
+      output: '15'
+  task_2:
+    - input: |+
+        A Y
+        B X
+        C Z
+      output: '12'
