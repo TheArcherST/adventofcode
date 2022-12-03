@@ -23,10 +23,6 @@ class ResolutionExecutor:
         with self.console.status('Input data loading...', spinner='bouncingBar'):
             self._load_input()
 
-        self.console.print(f'Processing task {self.resolution.year}.'
-                           f'{self.resolution.day}::{self.resolution.task_number}',
-                           end='\n\n')
-
         task_indent = f'Task {self.resolution.year}::{self.resolution.day}::{self.resolution.task_number}'
         section = f'============= {task_indent} ============='
         self.console.print(section)
