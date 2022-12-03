@@ -1,5 +1,3 @@
-import itertools
-
 from fastaof import AdventOfCodePuzzle
 
 

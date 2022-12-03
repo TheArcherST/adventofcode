@@ -1,5 +1,5 @@
-from typing import Callable, List
 from dataclasses import dataclass
+from typing import Callable, List
 
 
 @dataclass

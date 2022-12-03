@@ -1,6 +1,7 @@
 from typing import Dict, Tuple
-from .utils import docstring_to_tests
+
 from .models import TaskResolution
+from .utils import docstring_to_tests
 
 
 class AdventOfCodePuzzle:

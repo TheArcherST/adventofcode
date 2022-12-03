@@ -5,5 +5,5 @@ in user-friendly workspace, with minimal limitations.
 
 """
 
-from .puzzle import AdventOfCodePuzzle
 from .executor import ResolutionExecutor
+from .puzzle import AdventOfCodePuzzle

@@ -1,5 +1,4 @@
 import dotenv
-
 from rich.console import Console
 
 from fastaof import AdventOfCodePuzzle, ResolutionExecutor

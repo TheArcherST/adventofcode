@@ -1,6 +1,6 @@
+import importlib
 import os
 import re
-import importlib
 
 
 def load_modules(root_module: str = r'resolutions'):
