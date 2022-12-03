@@ -15,7 +15,7 @@ def load_modules():
             if not re.fullmatch(r'day_[0-9]+[.]py', j):
                 continue
 
-            day = int(i.removeprefix('day_').removesuffix('.py'))
+            day = int(j.removeprefix('day_').removesuffix('.py'))
 
             try:
                 module = importlib.import_module(f'{i}.' + j.removesuffix('.py'))
