@@ -20,11 +20,11 @@ def load_modules():
             try:
                 module = importlib.import_module(f'{i}.' + j.removesuffix('.py'))
 
-                if hasattr(module, 'Resolution'):
-                    module.Resolution.__year__ = year
-                    module.Resolution.__day__ = day
+                if hasattr(module, 'Solution'):
+                    module.Solution.__year__ = year
+                    module.Solution.__day__ = day
 
-                    module.Resolution.register_resolutions()
+                    module.Solution.register_resolutions()
 
                 else:
                     print(f"Can't find resolution in {i!r} file")

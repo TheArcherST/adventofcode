@@ -44,7 +44,7 @@ def prepare_literal(l):
     return lib[l]
 
 
-class Resolution(AdventOfCodePuzzle):
+class Solution(AdventOfCodePuzzle):
     def task_1(self, data):
         data = data.strip()
         score = 0

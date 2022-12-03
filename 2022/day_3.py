@@ -1,7 +1,7 @@
 from fastaof import AdventOfCodePuzzle
 
 
-class Resolution(AdventOfCodePuzzle):
+class Solution(AdventOfCodePuzzle):
     def task_1(self, data):
         """Some task resolution
 
