@@ -7,40 +7,42 @@ from rich.console import Console
 from .models import TaskResolution
 
 
-class ResolutionExecutor:
+class SolutionExecutor:
     def __init__(self,
                  console: Console,
-                 resolution: TaskResolution,
+                 solution: TaskResolution,
                  session: str):
 
         self.console = console
-        self.resolution = resolution
+        self.solution = solution
         self._session = session
 
     def run(self):
         """ Run workspace """
 
+        self.console.print()
+
         with self.console.status('Input data loading...', spinner='bouncingBar'):
             self._load_input()
 
-        task_indent = f'Task {self.resolution.year}::{self.resolution.day}::{self.resolution.task_number}'
+        task_indent = f'Task {self.solution.year}::{self.solution.day}::{self.solution.task_number}'
         section = f'============= {task_indent} ============='
         self.console.print(section)
 
-        for n, testcase in enumerate(self.resolution.autotests):
-            actual_output = self.resolution.func(self, testcase.input)
+        for n, testcase in enumerate(self.solution.autotests):
+            actual_output = self.solution.func(self, testcase.input)
 
             if actual_output == testcase.output:
                 self.console.print(f'Test {n + 1} [green]passed[/green]')
             else:
                 self.console.print(f'[red]Test {n + 1} failed: [/red]{actual_output!r} != {testcase.output!r}')
 
-        if self.resolution.autotests:
+        if self.solution.autotests:
             self.console.print('-' * len(section))
 
         start_at = time.monotonic_ns() / 1000
         try:
-            result = self.resolution.func(self, self._input_)
+            result = self.solution.func(self, self._input_)
         except Exception as e:
             self.console.print(f'Error: {e}')
         else:
@@ -54,7 +56,7 @@ class ResolutionExecutor:
         self.console.print()
 
     def _input_url(self):
-        return f'https://adventofcode.com/2022/day/{self.resolution.day}/input'
+        return f'https://adventofcode.com/2022/day/{self.solution.day}/input'
 
     def _load_input(self):
         cookies = {
