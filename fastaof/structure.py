@@ -3,22 +3,31 @@ import os
 import re
 
 
-def load_modules(root_module: str = r'resolutions'):
-    for i in os.listdir(root_module):
-        if not re.fullmatch(r'day_[0-9]+[.]py', i):
+def load_modules():
+    for i in os.listdir('.'):
+
+        if not re.fullmatch(r'^[0-9]+$', i):
             continue
 
-        day = int(i.removeprefix('day_').removesuffix('.py'))
+        year = int(i)
 
-        try:
-            module = importlib.import_module('resolutions.' + i.removesuffix('.py'))
+        for j in os.listdir(i):
+            if not re.fullmatch(r'day_[0-9]+[.]py', j):
+                continue
 
-            if hasattr(module, 'Resolution'):
-                module.Resolution.__day__ = day
-                module.Resolution.__year__ = 2022  # TODO: add support for other years
-                module.Resolution.register_resolutions()
-            else:
-                print(f"Can't find resolution in {i!r} file")
+            day = int(i.removeprefix('day_').removesuffix('.py'))
 
-        except ImportError:
-            print(f"Can't import module {i}")
+            try:
+                module = importlib.import_module(f'{i}.' + j.removesuffix('.py'))
+
+                if hasattr(module, 'Resolution'):
+                    module.Resolution.__year__ = year
+                    module.Resolution.__day__ = day
+
+                    module.Resolution.register_resolutions()
+
+                else:
+                    print(f"Can't find resolution in {i!r} file")
+
+            except ImportError:
+                print(f"Can't import module {i}")
