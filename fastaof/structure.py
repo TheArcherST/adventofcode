@@ -24,10 +24,10 @@ def load_modules():
                     module.Solution.__year__ = year
                     module.Solution.__day__ = day
 
-                    module.Solution.register_resolutions()
+                    module.Solution.register_solutions()
 
                 else:
-                    print(f"Can't find resolution in {i!r} file")
+                    print(f"Can't find `Solution` class in {i!r} file")
 
             except ImportError:
                 print(f"Can't import module {i}")

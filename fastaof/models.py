@@ -9,7 +9,7 @@ class TestCase:
 
 
 @dataclass
-class TaskResolution:
+class TaskSolution:
     year: int
     day: int
     task_number: int

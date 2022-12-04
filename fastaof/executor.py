@@ -4,13 +4,13 @@ import time
 import requests
 from rich.console import Console
 
-from .models import TaskResolution
+from .models import TaskSolution
 
 
 class SolutionExecutor:
     def __init__(self,
                  console: Console,
-                 solution: TaskResolution,
+                 solution: TaskSolution,
                  session: str):
 
         self.console = console

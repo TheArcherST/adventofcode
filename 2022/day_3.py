@@ -3,7 +3,7 @@ from fastaof import AdventOfCodePuzzle
 
 class Solution(AdventOfCodePuzzle):
     def task_1(self, data):
-        """Some task resolution
+        """Some task solution
 
         :input 1:
             vJrwpWtwJgWrhcsFMMfFFhFp
@@ -28,7 +28,7 @@ class Solution(AdventOfCodePuzzle):
         return str(sum_)
 
     def task_2(self, data):
-        """Some task resolution
+        """Some task solution
 
         :input 1:
             vJrwpWtwJgWrhcsFMMfFFhFp

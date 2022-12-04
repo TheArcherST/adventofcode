@@ -1,6 +1,6 @@
 from typing import Dict, Tuple
 
-from .models import TaskResolution
+from .models import TaskSolution
 from .utils import docstring_to_tests
 
 
@@ -10,33 +10,33 @@ class AdventOfCodePuzzle:
     This classs is container to declare puzzles.
 
 
-    Puzzle resolution declaration
-    -----------------------------
+    Puzzle solution declaration
+    ---------------------------
 
-    >>> class Resolution(AdventOfCodePuzzle):
+    >>> class Solution(AdventOfCodePuzzle):
     ...     def task_1(self, data):
     ...         pass
 
-    Here, we initialized class Resolution, that represents puzzle
-    resolution for some day. Here, you can declare your tasks resolutions
+    Here, we initialized class Solution, that represents puzzle
+    solution for some day. Here, you can declare your tasks solutions
     in functions, named in match with regex `task_[0-9]`.
 
     Also, you can specify puzzle date by providing classvars __day__
     and __year__ to class instance, while initializing sublass or later.
 
     By base class, you can access all sublasses by declarated interface,
-    to get tasks for sepcified date, and also to get latest resolution (
+    to get tasks for sepcified date, and also to get latest solution (
     to fastly testing active puzzles)
 
 
-    Resolution testing
+    Solution testing
     ------------------
 
     To create autotests to your alghoritm, declare excepted behaviour
     in function's docstring, using reStructiuredText syntax, pass input
     and output data in following format:
 
-    >>> class Resolution(AdventOfCodePuzzle):
+    >>> class Solution(AdventOfCodePuzzle):
     ...     def task_1(self, data):
     ...         '''
     ...         :input:
@@ -56,13 +56,13 @@ class AdventOfCodePuzzle:
     __day__ = None
 
     # private protocol
-    _resolutions_: Dict[Tuple[int, int, int], TaskResolution] = dict()
+    _solutions_: Dict[Tuple[int, int, int], TaskSolution] = dict()
 
     @classmethod
-    def register_resolutions(cls):
-        """Register resolutions method
+    def register_solutions(cls):
+        """Register solutions method
 
-        Registering methods, that matched by specified resolution method regex,
+        Registering methods, that matched by specified solution method regex,
         and registering them in static variables of the class. You can call it
         again to update information about solution (this method not making factory
         that synchronized with subclass state)
@@ -77,11 +77,11 @@ class AdventOfCodePuzzle:
                     tests = []
 
                 number = int(k.removeprefix('task_'))
-                resolution = TaskResolution(
+                solution = TaskSolution(
                     cls.__year__, cls.__day__, number, func, tests
                 )
-                cls._resolutions_.update({(cls.__year__, cls.__day__, number): resolution})
+                cls._solutions_.update({(cls.__year__, cls.__day__, number): solution})
 
     @classmethod
-    def get_latest(cls) -> TaskResolution:
-        return cls._resolutions_[max(cls._resolutions_.keys())]
+    def get_latest(cls) -> TaskSolution:
+        return cls._solutions_[max(cls._solutions_.keys())]

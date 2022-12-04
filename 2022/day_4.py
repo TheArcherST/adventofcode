@@ -4,7 +4,7 @@ from fastaof import AdventOfCodePuzzle
 class Solution(AdventOfCodePuzzle):
     def task_1(self, data):
 
-        """Some task resolution
+        """Some task solution
 
         :input 1:
             2-4,6-8
@@ -33,7 +33,7 @@ class Solution(AdventOfCodePuzzle):
 
     def task_2(self, data):
 
-        """Some task resolution
+        """Some task solution
 
         :input 1:
             2-4,6-8
