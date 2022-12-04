@@ -24,8 +24,8 @@ class Solution(AdventOfCodePuzzle):
             a, b = i.split(',')
             a1, a2 = a.split('-')
             b1, b2 = b.split('-')
-            range1 = range(int(a1), int(a2))
-            range2 = range(int(b1), int(b2))
+            range1 = range(int(a1), int(a2) + 1)
+            range2 = range(int(b1), int(b2) + 1)
             il = len(set(range1) & set(range2))
             if il == len(range1) or il == len(range2):
                 res += 1
