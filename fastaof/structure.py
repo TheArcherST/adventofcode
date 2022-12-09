@@ -17,8 +17,10 @@ def load_modules():
 
             day = int(j.removeprefix('day_').removesuffix('.py'))
 
+            module_name = f'{i}.' + j.removesuffix('.py')
+
             try:
-                module = importlib.import_module(f'{i}.' + j.removesuffix('.py'))
+                module = importlib.import_module(module_name)
 
                 if hasattr(module, 'Solution'):
                     module.Solution.__year__ = year
@@ -29,5 +31,5 @@ def load_modules():
                 else:
                     print(f"Can't find `Solution` class in {i!r} file")
 
-            except ImportError:
-                print(f"Can't import module {i}")
+            except ImportError as e:
+                raise ImportError(f"Can't import module {module_name}") from e
