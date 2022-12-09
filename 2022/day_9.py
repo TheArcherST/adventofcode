@@ -1,8 +1,13 @@
+import time
 from typing import Optional
 
 from fastaof import AdventOfCodePuzzle
 
 from utils.vector import Vector, Coordinates, BasePoint
+
+
+RENDER = False
+
 
 MAX_VEC_LENGTH = Vector((0, 0), (1, 1)).len()
 # vector length in following case
@@ -41,9 +46,9 @@ def _print_points(points, shape):
     for row in reversed(_build_point_map(points, shape)):
         for i in row:
             if i is None:
-                print('.', end='')
+                print('.', end=' ')
             else:
-                print(i.__dict__.get('label', '#'), end='')
+                print(i.__dict__.get('label', '#'), end=' ')
         print()
 
 
@@ -154,7 +159,7 @@ class Solution(AdventOfCodePuzzle):
                 'D': (0, -1)
             }[direction]
 
-            shape = (Coordinates(-5, -10), Coordinates(15, 10))
+            shape = (Coordinates(-5, -10) - (5, 5), Coordinates(15, 10) + (5, 5))
 
             for _ in range(count):
                 nodes[0] += offset
@@ -163,10 +168,11 @@ class Solution(AdventOfCodePuzzle):
 
                     is_updated = resolve_physics(nodes[j], nodes[j + 1])
 
-                    # _print_points(nodes, shape)
-                    # print()
-                    # print()
-                    # input()
+                    if RENDER:
+                        _print_points(nodes, shape)
+                        print()
+                        print()
+                        time.sleep(0.05)
 
                     if not is_updated:
                         break
