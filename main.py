@@ -3,8 +3,8 @@ import os
 import dotenv
 from rich.console import Console
 
-from fastaof import AdventOfCodePuzzle, SolutionExecutor
-from fastaof.structure import load_modules
+from fastaoc import AdventOfCodePuzzle, SolutionExecutor
+from fastaoc.structure import load_modules
 
 
 def main():

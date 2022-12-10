@@ -1,5 +1,5 @@
-from fastaof import AdventOfCodePuzzle
-import time
+from fastaoc import AdventOfCodePuzzle
+
 
 class Solution(AdventOfCodePuzzle):
     def task_1(self, data):

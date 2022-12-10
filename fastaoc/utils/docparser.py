@@ -8,7 +8,7 @@ import docutils.nodes
 import docutils.parsers.rst
 import docutils.utils
 
-from fastaof.models import TestCase
+from fastaoc.models import TestCase
 
 
 def parse_rst(text: str) -> docutils.nodes.document:

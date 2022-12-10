@@ -1,4 +1,4 @@
-from fastaof import AdventOfCodePuzzle
+from fastaoc import AdventOfCodePuzzle
 
 
 def is_value_filter(seq):

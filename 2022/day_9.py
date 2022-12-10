@@ -1,7 +1,7 @@
 import time
 from typing import Optional
 
-from fastaof import AdventOfCodePuzzle
+from fastaoc import AdventOfCodePuzzle
 
 from utils.vector import Vector, Coordinates, BasePoint
 

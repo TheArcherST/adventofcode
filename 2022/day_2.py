@@ -1,6 +1,6 @@
 from enum import Enum
 
-from fastaof import AdventOfCodePuzzle
+from fastaoc import AdventOfCodePuzzle
 
 
 class GameEnum(Enum):
