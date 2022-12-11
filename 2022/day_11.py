@@ -36,15 +36,6 @@ class Test:
     __repr__ = __str__
 
 
-class MyNumber:
-    def __init__(self, initial: float):
-        self.initial = initial
-        self.operations: list[Operation] = []
-
-    def add_operation(self, op: Operation):
-        self.operations.append(op)
-
-
 @dataclass
 class Monkey:
     items: list[int]
