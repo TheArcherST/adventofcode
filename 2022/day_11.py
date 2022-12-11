@@ -1,7 +1,5 @@
-import pprint
-
 from fastaoc import AdventOfCodePuzzle
-import yaml
+
 from dataclasses import dataclass
 
 
@@ -147,7 +145,6 @@ class Solution(AdventOfCodePuzzle):
 
         rounds = 10000
         for _ in range(rounds):
-            print(_)
             for n, i in monkeys.items():
                 items = i.items.copy()
                 i.items.clear()
