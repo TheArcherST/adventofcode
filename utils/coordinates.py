@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from .point import BasePoint
 
 if TYPE_CHECKING:
-    from render.geometry.vector import Vector
+    from .vector import Vector
 
 
 class Coordinates(BasePoint):
