@@ -48,6 +48,8 @@ class Solution(AdventOfCodePuzzle):
 
         """
 
+        _SEND_SOURCE = Coordinates(0, 500)
+
         # to normally use grid indexing, let's normalize `y` coordinates (set most left to zero)
 
         rocks = []
@@ -115,7 +117,7 @@ class Solution(AdventOfCodePuzzle):
 
         while True:
             if new_send:
-                current_send_coord = SEND_SOURCE - (0, y_offset) + MoveOffset.DOWN
+                current_send_coord = _SEND_SOURCE - (0, y_offset) + MoveOffset.DOWN
                 new_send = False
 
             for i in ((1, 0), (1, -1), (1, 1)):
@@ -156,19 +158,22 @@ class Solution(AdventOfCodePuzzle):
         obtained = set()
         for i in data.strip().split('\n'):
             coordinates = [Coordinates(*map(int, reversed(j.split(',')))) for j in i.split(' -> ')]
+
             for start, end in zip(coordinates, islice(coordinates, 1, None)):
                 for x in abs_range(start.x, end.x, addition=1):
                     for y in abs_range(start.y, end.y, addition=1):
                         obtained.add((x, y))
 
-        current_send_coord = SEND_SOURCE
         result = 0
+
         barrier_line__x = max(*(i[0] for i in obtained)) + 2
+        current_send_coord = SEND_SOURCE
 
         while True:
+            for x_offset, y_offset in (1, 0), (1, -1), (1, 1):  # standard movements **in right order**
 
-            for i in (1, 0), (1, -1), (1, 1):  # movements
-                test_send_coord = (current_send_coord[0] + i[0], current_send_coord[1] + i[1])
+                test_send_coord = (current_send_coord[0] + x_offset,
+                                   current_send_coord[1] + y_offset)
 
                 if not (test_send_coord in obtained or test_send_coord[0] == barrier_line__x):
                     current_send_coord = test_send_coord
