@@ -1,3 +1,5 @@
+import time
+
 from fastaoc import AdventOfCodePuzzle
 
 from enum import IntEnum
@@ -19,7 +21,7 @@ class GridCell(IntEnum):
     ROCK = 2
 
 
-SEND_SOURCE = Coordinates(0, 500)
+SEND_SOURCE = (0, 500)
 
 
 def abs_range(*args, addition: int = 0):
@@ -95,7 +97,8 @@ class Solution(AdventOfCodePuzzle):
 
         result = 0
 
-        def prt():
+        def render():
+            __r = ''
             for _1 in grid:
                 for _2 in _1:
                     if _2 is GridCell.AIR:
@@ -105,16 +108,17 @@ class Solution(AdventOfCodePuzzle):
                     else:
                         l_ = '#'
 
-                    print(l_, end=' ')
-                print()
-            print('======'*4)
+                    __r += l_ + ' '
+                __r += '\n'
+            __r += '======'*4
+            return __r
 
         while True:
             if new_send:
                 current_send_coord = SEND_SOURCE - (0, y_offset) + MoveOffset.DOWN
                 new_send = False
 
-            for i in (MoveOffset.DOWN, MoveOffset.DOWN+MoveOffset.LEFT, MoveOffset.DOWN+MoveOffset.RIGHT):
+            for i in ((1, 0), (1, -1), (1, 1)):
                 test_send_coord = current_send_coord + i
 
                 if (
@@ -139,14 +143,6 @@ class Solution(AdventOfCodePuzzle):
 
     def task_2(self, data):
 
-        # TODO: fix algorithm. puzzle answer evaluating took 30s.
-        # possible optimisation...
-        #
-        # 1. Getting nearest down surface by indexes sort (optimize iterating over air)
-        # 2. `Coordinate` object copying in many places, maybe it is took the most of time
-        #     here. First solution: throw it out. Second: make calls in the object that
-        #     avoid copying, and use them here.
-
         """Some task solution
 
         :input 1:
@@ -157,104 +153,30 @@ class Solution(AdventOfCodePuzzle):
 
         """
 
-        # to normally use grid indexing, let's normalize `y` coordinates (set most left to zero)
-
-        rocks = []
-
-        y_offset = float('inf')
-
-        max_x = 0
-        max_y = 0
-
+        obtained = set()
         for i in data.strip().split('\n'):
             coordinates = [Coordinates(*map(int, reversed(j.split(',')))) for j in i.split(' -> ')]
             for start, end in zip(coordinates, islice(coordinates, 1, None)):
                 for x in abs_range(start.x, end.x, addition=1):
                     for y in abs_range(start.y, end.y, addition=1):
-                        y_offset = min(y_offset, y)
+                        obtained.add((x, y))
 
-                        max_x = max(max_x, x)
-                        max_y = max(max_y, y)
-
-                        coordinate = Coordinates(x, y)
-                        rocks.append(coordinate)
-
-        y_offset = 0
-
-        grid: list[list[GridCell]] = [
-            [GridCell.AIR for _ in range(int((max_y + 1 - y_offset) * 1.5))]
-            for _ in range((max_x + 1) + 2)
-        ]
-
-        # -   0  1  2 -> y (y is column)
-        #
-        # 0   0  0  0
-        # 1   0  1  0
-        # 2   2  2  2
-        # |
-        # v
-        # x (x is row)
-        #
-        # selecting element for point (x, y): grid[x][y]
-
-        for i in rocks:
-            grid[i.x][i.y - y_offset] = GridCell.ROCK
-
-        current_send_coord: Optional[Coordinates] = None
-        new_send = True
-
-        ox_range = range(0, max_x + 1)
-        oy_range = range(0, max_y - y_offset + 1)
-
+        current_send_coord = SEND_SOURCE
         result = 0
-
-        def prt():
-            for _1 in grid:
-                for _2 in _1:
-                    if _2 is GridCell.AIR:
-                        l_ = '.'
-                    elif _2 is GridCell.SEND:
-                        l_ = 'o'
-                    else:
-                        l_ = '#'
-
-                    print(l_, end=' ')
-                print()
-            print('======'*4)
+        barrier_line__x = max(*(i[0] for i in obtained)) + 2
 
         while True:
-            if new_send:
-                current_send_coord = SEND_SOURCE - (0, y_offset)
 
-                if grid[current_send_coord.x][current_send_coord.y] is GridCell.SEND:
-                    prt()
-                    return str(result)
+            for i in (1, 0), (1, -1), (1, 1):  # movements
+                test_send_coord = (current_send_coord[0] + i[0], current_send_coord[1] + i[1])
 
-                new_send = False
-
-            for i in (MoveOffset.DOWN, MoveOffset.DOWN+MoveOffset.LEFT, MoveOffset.DOWN+MoveOffset.RIGHT):
-                test_send_coord = current_send_coord + i
-
-                if (
-                    test_send_coord.x not in ox_range
-                    or test_send_coord.y not in oy_range
-                ):
-                    # return str(result)
-                    pass
-
-                if test_send_coord.x == len(grid) - 1:
-                    test_send_coord_val = GridCell.ROCK
-                else:
-                    test_send_coord_val = grid[test_send_coord.x][test_send_coord.y]
-
-                if test_send_coord_val is GridCell.AIR:
+                if not (test_send_coord in obtained or test_send_coord[0] == barrier_line__x):
                     current_send_coord = test_send_coord
                     break
-                elif test_send_coord_val in (GridCell.ROCK, GridCell.SEND):
-                    continue
-                else:
-                    raise RuntimeError()
             else:
                 result += 1
-                new_send = True
-                grid[current_send_coord.x][current_send_coord.y] = GridCell.SEND
+                obtained.add(current_send_coord)
+                if SEND_SOURCE in obtained:
+                    return str(result)
+                else:
+                    current_send_coord = SEND_SOURCE
