@@ -143,7 +143,7 @@ class Solution(AdventOfCodePuzzle):
         # possible optimisation...
         #
         # 1. Getting nearest down surface by indexes sort (optimize iterating over air)
-        # 2. `Coordinate` object copying in many places, maybe it is took the post of time
+        # 2. `Coordinate` object copying in many places, maybe it is took the most of time
         #     here. First solution: throw it out. Second: make calls in the object that
         #     avoid copying, and use them here.
 
