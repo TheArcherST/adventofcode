@@ -6,10 +6,10 @@ import re
 def load_modules():
     for i in os.listdir('.'):
 
-        if not re.fullmatch(r'^[0-9]+$', i):
+        if not re.fullmatch(r'^_[0-9]+$', i):
             continue
 
-        year = int(i)
+        year = int(i[1:])
 
         for j in os.listdir(i):
             if not re.fullmatch(r'day_[0-9]+[.]py', j):
