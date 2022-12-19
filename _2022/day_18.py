@@ -1,16 +1,5 @@
 from fastaoc import AdventOfCodePuzzle
-from itertools import islice
-from typing import Optional, Union
 from dataclasses import dataclass, field
-
-
-@dataclass
-class BlockedAir:
-    x: int
-    y: int
-    z: int
-    possible_square: int = 0
-    blocked_sides: set[int] = field(default_factory=set)
 
 
 class Solution(AdventOfCodePuzzle):
@@ -86,7 +75,7 @@ class Solution(AdventOfCodePuzzle):
             3,1,3
             3,2,2
         :output 1:
-            6
+            72
 
         :input 2:
             2,2,2
@@ -103,7 +92,7 @@ class Solution(AdventOfCodePuzzle):
             2,1,5
             2,3,5
         :output 2:
-            6
+            58
 
         """
 
