@@ -1,5 +1,4 @@
 from fastaoc import AdventOfCodePuzzle
-from dataclasses import dataclass, field
 
 
 class Solution(AdventOfCodePuzzle):
