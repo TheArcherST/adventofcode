@@ -1,4 +1,5 @@
 from typing import Iterable, TypeVar
+from enum import Enum
 
 from fastaoc import AdventOfCodePuzzle
 
@@ -6,52 +7,69 @@ from fastaoc import AdventOfCodePuzzle
 T = TypeVar('T')
 
 
+class IndexationBehavior(Enum):
+    FIRST = 'FIRST'
+    SECOND = 'SECOND'
+
+
 class MySequence:
-    def __init__(self, sequence: Iterable[int]):
+    def __init__(self, sequence: Iterable[int], indexation_behaviour: IndexationBehavior):
         # PyCharm TypeChecker bug...
         # noinspection PyTypeChecker
         self.indexed_sequence: list[tuple[int, int]] = list(enumerate(sequence))
+        self.indexation_behaviour = indexation_behaviour
+        self.length = len(self.indexed_sequence)
 
     @property
     def sequence(self) -> list[int]:
         return [i[1] for i in self.indexed_sequence]
 
     def __getitem__(self, other):
-        return self.indexed_sequence[self.resolve_index(other, to_insert=False)]
+        return self.indexed_sequence[self.resolve_index(other, getter=True)]
 
     def __setitem__(self, n, o):
         self.indexed_sequence[self.resolve_index(n)] = o
 
-    def resolve_index(self, other, to_insert=True, sus_behavior=False):
-        a = ((abs(other) + (abs(other) // len(self.indexed_sequence) if to_insert else 0)) % (
-                    len(self.indexed_sequence) - (1 if sus_behavior else 0)))
+    def resolve_index(self, other, behaviour: IndexationBehavior = None, getter: bool = False):
+        behaviour = behaviour or self.indexation_behaviour
+
+        if behaviour is IndexationBehavior.FIRST:
+            if not other:
+                index = len(self.indexed_sequence)
+            else:
+                if getter:
+                    index = abs(other) % self.length
+                else:
+                    index = (abs(other) + (abs(other) // self.length)) % self.length
+
+        elif self.indexation_behaviour is IndexationBehavior.SECOND:
+            if not other:
+                print('y')
+                index = len(self.indexed_sequence)
+            else:
+                if getter:
+                    index = (other % (self.length - 1))
+                else:
+                    index = ((other + (abs(other) // self.length)) % (self.length - 1))
+        else:
+            raise RuntimeError()
+
         if other < 0:
-            a = -a
-        if (not a) and to_insert:
-            a = len(self.indexed_sequence)
-        # print(f'Index resolve: {other} -> {a}')
+            index = -index
 
-        return a
+        return index
 
-    def resolve(self, times=1, sus_index_behavior: bool = False):
+    def resolve(self, times=1):
         indexed_list = list(enumerate(self.indexed_sequence))
 
         for _ in range(times):
             for (n, i) in enumerate(sorted(indexed_list.copy(), key=lambda x: x[0])):
-                # print([i[1] for i in indexed_list])
                 actual_index = indexed_list.index(i)
-                e = indexed_list.pop(actual_index)
-                # print(f'Pop element {e} from list')
-                new_index = self.resolve_index(actual_index + i[1][1], to_insert=False, sus_behavior=sus_index_behavior)
-                # print(f'Index to insert is {new_index}')
+                indexed_list.pop(actual_index)
+                new_index = self.resolve_index(actual_index + i[1][1])
                 indexed_list.insert(new_index, i)
-                # print(f'Insert value {i} for index {new_index}')
-                # print('======' * 10)
-                # print([i[1] for i in indexed_list])
 
         self.indexed_sequence = [i[1] for i in indexed_list]
-
-        # self.sequence = list(i[1] for i in indexed_list)
 
 
 class Solution(AdventOfCodePuzzle):
@@ -71,12 +89,11 @@ class Solution(AdventOfCodePuzzle):
 
         """
 
-        seq = MySequence(map(int, data.strip().split()))
+        seq = MySequence(map(int, data.strip().split()), IndexationBehavior.FIRST)
         seq.resolve()
 
-        zi = seq.sequence.index(0)
-
-        return str(seq[zi + 1000][1] + seq[zi + 2000][1] + seq[zi + 3000][1])
+        zero_index = seq.sequence.index(0)
+        return str(seq[zero_index + 1000][1] + seq[zero_index + 2000][1] + seq[zero_index + 3000][1])
 
     def task_2(self, data):
         """Some task solution
@@ -94,10 +111,9 @@ class Solution(AdventOfCodePuzzle):
 
         """
 
-        seq = MySequence(map(lambda x: int(x) * 811589153, data.strip().split()))
+        seq = MySequence(map(lambda x: int(x) * 811589153, data.strip().split()), IndexationBehavior.SECOND)
 
-        seq.resolve(10, sus_index_behavior=True)
+        seq.resolve(10)
+        zero_index = seq.sequence.index(0)
 
-        zi = seq.sequence.index(0)
-
-        return str(seq[zi + 1000][1] + seq[zi + 2000][1] + seq[zi + 3000][1])
+        return str(seq[zero_index + 1000][1] + seq[zero_index + 2000][1] + seq[zero_index + 3000][1])
