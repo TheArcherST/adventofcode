@@ -8,16 +8,18 @@ file that can be used to build new functions included in __all__.
 """
 
 
-from typing import TypeVar, Optional, Tuple
+from typing import Optional, Tuple
+from operator import add
 
 
-# to make pretty typing without overheads, I'm not use NamedTuple or NewType (that implies
-# that object constructors will be changed, native tuple is faster)
+from .aliases import CoordinatesAlias, ScalarAlias
 
-X_T = TypeVar('X_T', int, float)
-Y_T = TypeVar('Y_T', int, float)
-CoordinatesAlias = Tuple[X_T, Y_T]
-LineFunctionAlias = Tuple[float, float]  # y = kx + b  ->  (k, b)
+
+LineFunctionAlias = Tuple[ScalarAlias, ScalarAlias]  # y = kx + b  ->  (k, b)
+
+
+def coordinates_sum(first: CoordinatesAlias, second: CoordinatesAlias):
+    return tuple(map(lambda x: add(*x), zip(first, second)))
 
 
 def line_segments_union(first: CoordinatesAlias, second: CoordinatesAlias) -> Optional[CoordinatesAlias]:

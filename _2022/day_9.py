@@ -3,7 +3,7 @@ from typing import Optional
 
 from fastaoc import AdventOfCodePuzzle
 
-from utils.vector import Vector, Coordinates, BasePoint
+from utils.vector import Vector
 
 
 RENDER = False
@@ -23,9 +23,9 @@ SPEC_LENGTH = Vector((0, 0), (2, 2)).len()
 # this case not desribed in first part of task...
 
 
-def _build_point_map(points: list[BasePoint], shape: tuple[Coordinates, Coordinates]) -> list[list[Optional[BasePoint]]]:
+def _build_point_map(points: list[Vector], shape: tuple[Vector, Vector]) -> list[list[Optional[Vector]]]:
     points = points
-    result: list[list[Optional[BasePoint]]] = [
+    result: list[list[Optional[Vector]]] = [
         [
             None
             for _ in range(shape[1].x - shape[0].x + 1)
@@ -52,7 +52,7 @@ def _print_points(points, shape):
         print()
 
 
-def resolve_physics(head: Coordinates, tail: Coordinates):
+def resolve_physics(head: Vector, tail: Vector):
     """Resolve physics method
     
     Update pair of nodes, by finding shortest move vector length.
@@ -60,13 +60,13 @@ def resolve_physics(head: Coordinates, tail: Coordinates):
     
     """
 
-    if not ((head.vec - tail.vec).len() > MAX_VEC_LENGTH):
+    if not ((head - tail).len() > MAX_VEC_LENGTH):
         return False
 
     new_tail = None
     best_movement_len = float('inf')
 
-    if (head.vec - tail.vec).len() != SPEC_LENGTH:
+    if (head - tail).len() != SPEC_LENGTH:
         cases = ((1, 0), (0, 1), (-1, 0), (0, -1))
     else:
         cases = ((1, 1), (-1, -1), (-1, 1), (1, -1))
@@ -102,7 +102,7 @@ class Solution(AdventOfCodePuzzle):
             13
 
         """
-        tail, head = (Coordinates(0, 0), Coordinates(0, 0))
+        tail, head = (Vector(0, 0), Vector(0, 0))
         visited = {tuple(tail)}
         for i in data.strip().split('\n'):
             direction, count = i.split()
@@ -139,7 +139,7 @@ class Solution(AdventOfCodePuzzle):
 
         """
         nodes_count = 10  # H + 1..9
-        nodes = [Coordinates(0, 0) for _ in range(nodes_count)]
+        nodes = [Vector(0, 0) for _ in range(nodes_count)]
 
         def node_labels():
             yield 'H'
@@ -159,7 +159,7 @@ class Solution(AdventOfCodePuzzle):
                 'D': (0, -1)
             }[direction]
 
-            shape = (Coordinates(-5, -10) - (5, 5), Coordinates(15, 10) + (5, 5))
+            shape = (Vector(-5, -10) - (5, 5), Vector(15, 10) + (5, 5))
 
             for _ in range(count):
                 nodes[0] += offset

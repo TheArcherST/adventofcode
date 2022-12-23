@@ -1,42 +1,44 @@
-# source: https://github.com/TheArcherST/terminalGame/blob/main/render/geometry/vector.py
+from typing import Union, overload
 
-
-from typing import Union, overload, TypeVar
-
-from .point import BasePoint, point_able, number_alias
+from .aliases import CoordinatesAlias, ScalarAlias, is_scalar
 from .coordinates import Coordinates
 
 
-T = TypeVar('T')
+class Vector(Coordinates):
+    """
+    Vector object
+    """
 
+    __slots__ = ('x', 'y')
 
-class Vector(BasePoint):
     @overload
-    def __init__(self, *, obj: point_able):
+    def __init__(self, *, obj: CoordinatesAlias):
         pass
 
     @overload
     def __init__(self,
-                 x: Union[number_alias, Coordinates, tuple[number_alias, number_alias]],
-                 y: Union[number_alias, Coordinates, tuple[number_alias, number_alias]]):
+                 x: Union[ScalarAlias, CoordinatesAlias],
+                 y: Union[ScalarAlias, CoordinatesAlias]):
 
         pass
 
     def __init__(self,
-                 x: Union[number_alias, Coordinates, tuple[number_alias, number_alias]] = None,
-                 y: Union[number_alias, Coordinates, tuple[number_alias, number_alias]] = None,
-                 obj: point_able = None):
+                 x: Union[ScalarAlias, CoordinatesAlias] = None,
+                 y: Union[ScalarAlias, CoordinatesAlias] = None,
+                 obj: CoordinatesAlias = None):
 
         if obj is not None:
             x, y = obj
-
-        elif isinstance(x, (Coordinates, tuple)) and isinstance(y, (Coordinates, tuple)):
-            origin_x, origin_y = x
-            target_x, target_y = y
-            x, y = (target_x - origin_x, target_y - origin_y)
-
         else:
-            pass
+            status = is_scalar(x) + is_scalar(y)
+
+            if status not in (0, 2):
+                raise ValueError("Can't initialize `Vector`, arguments must be exactly points or scalars")
+
+            elif status == 0:  # no scalar => transformation required
+                origin_x, origin_y = x
+                target_x, target_y = y
+                x, y = (target_x - origin_x, target_y - origin_y)
 
         super().__init__(x, y)
 
@@ -51,4 +53,5 @@ class Vector(BasePoint):
     def __str__(self):
         return '{' + str(self.x) + ', ' + str(self.y) + '}'
 
-    __repr__ = __str__
+    def __repr__(self):
+        return f'Vector({self.x}, {self.y})'
