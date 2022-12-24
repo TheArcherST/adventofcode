@@ -169,7 +169,7 @@ class Solution(AdventOfCodePuzzle):
             console.set_alt_screen(True)
 
         result = process_trip(console, blizzards, area, (0, -1), (max_x, max_y+1))
-        return str(result)
+        return str(result[1])
 
     def task_0(self, data):
         """Some task solution
