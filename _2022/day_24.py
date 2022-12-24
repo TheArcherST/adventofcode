@@ -171,7 +171,7 @@ class Solution(AdventOfCodePuzzle):
         result = process_trip(console, blizzards, area, (0, -1), (max_x, max_y+1))
         return str(result[1])
 
-    def task_0(self, data):
+    def task_2(self, data):
         """Some task solution
 
         :input 1:
