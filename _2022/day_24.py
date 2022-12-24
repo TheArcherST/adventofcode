@@ -1,7 +1,7 @@
 from fastaoc import AdventOfCodePuzzle
 
 from enum import Enum
-from
+
 
 class Direction(Enum):
     R = '>'
