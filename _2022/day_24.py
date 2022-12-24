@@ -1,7 +1,7 @@
 from fastaoc import AdventOfCodePuzzle
 
 from enum import Enum
-
+from
 
 class Direction(Enum):
     R = '>'
@@ -73,6 +73,47 @@ def resolve_blizzards_minute(blizzards: dict[tuple[int, int], list[Direction]], 
     return result
 
 
+def process_trip(blizzards: dict[tuple[int, int], list[Direction]],
+                 area: tuple[int, int, int, int],
+                 start_point: tuple[int, int], end_point: tuple[int, int]):
+
+    me_points = {start_point}
+    possible_me_moves = ((0, 1), (1, 0), (-1, 0), (0, -1))
+    counter = 0
+
+    min_x, min_y, max_x, max_y = area
+
+    while True:
+        counter += 1
+
+        blizzards = resolve_blizzards_minute(blizzards, min_x, min_y, max_x, max_y)
+
+        for me in me_points.copy():
+            new_me_points = set()
+
+            for j in possible_me_moves:
+                target = me[0] + j[0], me[1] + j[1]
+
+                x, y = target
+                if target != end_point:
+                    if (min_x > x) or (x > max_x):
+                        continue
+                    if (min_y > y) or (y > max_y):
+                        continue
+
+                if target not in blizzards:
+                    new_me_points.add(target)
+
+            me_points |= new_me_points
+            me_points -= blizzards.keys()
+
+            if end_point in new_me_points:
+                return blizzards, counter
+
+        # draw(blizzards | {k: [Direction.ME] for k in me_points})
+        # print('====' * 20)
+
+
 class Solution(AdventOfCodePuzzle):
     def task_1(self, data):
 
@@ -86,7 +127,7 @@ class Solution(AdventOfCodePuzzle):
             #<^v^^>#
             ######.#
         :output 1:
-            None
+            18
 
         """
 
@@ -103,43 +144,42 @@ class Solution(AdventOfCodePuzzle):
         # WARNING: if map not filled with blizzards, this logic will be failed.
         min_x, min_y = 0, 0
         max_x, max_y = max(i[0] for i in blizzards), max(i[1] for i in blizzards)
+        area = min_x, min_y, max_x, max_y
 
-        end_point = (max_x, max_y+1)
+        result = process_trip(blizzards, area, (0, -1), (max_x, max_y+1))
+        return str(result)
 
-        # simulate blizzards before exit achievement.
+    def task_2(self, data):
+        """Some task solution
 
-        me_points: set = {(0, -1)}
-        possible_me_moves = ((0, 1), (1, 0), (-1, 0), (0, -1))
-        counter = 0
+        :input 1:
+            #.######
+            #>>.<^<#
+            #.<..<<#
+            #>v.><>#
+            #<^v^^>#
+            ######.#
+        :output 1:
+            54
 
-        while True:
-            counter += 1
+        """
 
-            blizzards = resolve_blizzards_minute(blizzards, min_x, min_y, max_x, max_y)
+        blizzards: dict[tuple[int, int], list[Direction]] = dict()
 
-            for me in me_points.copy():
-                new_me_points = set()
+        for i_n, i in enumerate(data.strip().split('\n')):
+            for j_n, j in enumerate(i):
+                if j in ('#', '.'):  # yep, erase borders
+                    continue
+                direction = Direction(j)
+                blizzards.update({(j_n - 1, i_n - 1): [direction]})
 
-                for j in possible_me_moves:
-                    target = me[0] + j[0], me[1] + j[1]
+        # coordination limit for blizzards
+        # WARNING: if map not filled with blizzards, this logic will be failed.
+        min_x, min_y = 0, 0
+        max_x, max_y = max(i[0] for i in blizzards), max(i[1] for i in blizzards)
+        area = min_x, min_y, max_x, max_y
 
-                    x, y = target
-                    if target != end_point:
-                        if (min_x > x) or (x > max_x):
-                            continue
-                        if (min_y > y) or (y > max_y):
-                            continue
-
-                    if target not in blizzards:
-                        new_me_points.add(target)
-
-                me_points |= new_me_points
-                me_points = me_points.difference(blizzards.keys())
-
-                if end_point in new_me_points:
-                    return str(counter)
-
-            # draw(blizzards)
-            # print()
-            # draw(blizzards | {k: [Direction.ME] for k in me_points})
-            # print('===='*20)
+        blizzards, a = process_trip(blizzards, area, (0, -1), (max_x, max_y+1))
+        blizzards, b = process_trip(blizzards, area, (max_x, max_y+1), (0, -1))
+        blizzards, c = process_trip(blizzards, area, (0, -1), (max_x, max_y+1))
+        return str(a + b + c)
