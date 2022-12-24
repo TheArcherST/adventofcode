@@ -1,6 +1,15 @@
+import rich
+
 from fastaoc import AdventOfCodePuzzle
 
 from enum import Enum
+
+
+BLIZZARD_COLORS = ['cyan1']  # index++ : deep++
+ME_COLOR = 'deep_pink2'
+
+
+RENDER = False
 
 
 class Direction(Enum):
@@ -27,20 +36,27 @@ def get_area(points):
     return line_x, line_y
 
 
-def draw(blizzards: dict[tuple[int, int], list[Direction]]):
+def draw(console, blizzards: dict[tuple[int, int], list[Direction]]):
     area = get_area(blizzards.keys())
+    result = ''
     for y in range(0, area[1][1]):
-        print(y, end='\t')
         for x in range(0, area[0][1]):
             if (x, y) in blizzards:
                 directions = blizzards[(x, y)]
+                color_index = min(len(directions), len(BLIZZARD_COLORS)) - 1
                 if len(directions) == 1:
-                    print(directions[0].value, end='')
+                    if directions[0] == Direction.ME:
+                        color = ME_COLOR
+                    else:
+                        color = BLIZZARD_COLORS[color_index]
+                    result += f'[{color}]{directions[0].value}[/{color}]'
                 else:
-                    print(len(directions), end='')
+                    result += f'[{BLIZZARD_COLORS[color_index]}]{len(directions)}[/{BLIZZARD_COLORS[color_index]}]'
             else:
-                print('.', end='')
-        print()
+                result += '.'
+        result += '\n'
+
+    console.update_screen(result)
 
 
 def resolve_blizzards_minute(blizzards: dict[tuple[int, int], list[Direction]], min_x, min_y, max_x, max_y):
@@ -73,7 +89,8 @@ def resolve_blizzards_minute(blizzards: dict[tuple[int, int], list[Direction]], 
     return result
 
 
-def process_trip(blizzards: dict[tuple[int, int], list[Direction]],
+def process_trip(console,
+                 blizzards: dict[tuple[int, int], list[Direction]],
                  area: tuple[int, int, int, int],
                  start_point: tuple[int, int], end_point: tuple[int, int]):
 
@@ -110,8 +127,8 @@ def process_trip(blizzards: dict[tuple[int, int], list[Direction]],
             if end_point in new_me_points:
                 return blizzards, counter
 
-        # draw(blizzards | {k: [Direction.ME] for k in me_points})
-        # print('====' * 20)
+        if RENDER:
+            draw(console, blizzards | ({k: [Direction.ME] for k in me_points - {start_point}}))
 
 
 class Solution(AdventOfCodePuzzle):
@@ -146,10 +163,15 @@ class Solution(AdventOfCodePuzzle):
         max_x, max_y = max(i[0] for i in blizzards), max(i[1] for i in blizzards)
         area = min_x, min_y, max_x, max_y
 
-        result = process_trip(blizzards, area, (0, -1), (max_x, max_y+1))
+        console = rich.console.Console(color_system='truecolor', highlight=False)
+
+        if RENDER:
+            console.set_alt_screen(True)
+
+        result = process_trip(console, blizzards, area, (0, -1), (max_x, max_y+1))
         return str(result)
 
-    def task_2(self, data):
+    def task_0(self, data):
         """Some task solution
 
         :input 1:
@@ -179,7 +201,12 @@ class Solution(AdventOfCodePuzzle):
         max_x, max_y = max(i[0] for i in blizzards), max(i[1] for i in blizzards)
         area = min_x, min_y, max_x, max_y
 
-        blizzards, a = process_trip(blizzards, area, (0, -1), (max_x, max_y+1))
-        blizzards, b = process_trip(blizzards, area, (max_x, max_y+1), (0, -1))
-        blizzards, c = process_trip(blizzards, area, (0, -1), (max_x, max_y+1))
+        console = rich.console.Console(color_system='truecolor', highlight=False)
+
+        if RENDER:
+            console.set_alt_screen(True)
+
+        blizzards, a = process_trip(console, blizzards, area, (0, -1), (max_x, max_y+1))
+        blizzards, b = process_trip(console, blizzards, area, (max_x, max_y+1), (0, -1))
+        blizzards, c = process_trip(console, blizzards, area, (0, -1), (max_x, max_y+1))
         return str(a + b + c)
