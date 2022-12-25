@@ -83,5 +83,5 @@ class Solution(AdventOfCodePuzzle):
 
         for i in data.strip().split('\n'):
             result += snafu_to_decimal(i)
-        print(result)
+
         return decimal_to_snafu(result)
