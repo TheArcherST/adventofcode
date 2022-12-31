@@ -15,5 +15,5 @@ Solutions of the puzzles, listed here, include the code of visualization, so, yo
 ### 2022::9::2
 ![](https://github.com/TheArcherST/adventofcode/blob/master/illustrations/2022_14_1.gif)
 
-### 2022::14::1
+### 2022::9::2
 ![](https://github.com/TheArcherST/adventofcode/blob/master/illustrations/2022_9_2.gif)
