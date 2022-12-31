@@ -6,3 +6,14 @@ Solutions may be refactored, but I'm trying to probably store the first version 
 
 > This project deployed on replit.com:
 > https://replit.com/@TheArcherST/adventofcode
+
+
+# Illustrations
+
+Solutions of the puzzles, listed here, include the code of visualization, so, you can play with it yourself
+
+### 2022::9::2
+![](https://github.com/TheArcherST/adventofcode/illustrations/2022_9_2.gif)
+
+### 2022::14::1
+![](https://github.com/TheArcherST/adventofcode/illustrations/2022_14_1.gif)
